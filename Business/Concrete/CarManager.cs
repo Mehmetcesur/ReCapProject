@@ -1,4 +1,4 @@
-﻿using Business.Abstacts;
+﻿using Business.Abstract;
 using DataAccess.Abstacts;
 using Entities.Concrete;
 using DataAccess.Concrete.InMemory;
@@ -22,6 +22,23 @@ namespace Business.Concrete
         public List<Car> GetAll()
         {
             return _cardal.GetAll();
+        }
+
+        public void Add(Car car)
+        {
+
+            _cardal.Add(car);
+        }
+
+        public List<Car> GetCarsByBrandId(int id)
+        {
+            return _cardal.GetAll(c => c.BrandId == id);
+        }
+
+        public List<Car> GetCarsByColorId(int id)
+        {
+            return _cardal.GetAll(c => c.ColorId == id);
+
         }
     }
 }
