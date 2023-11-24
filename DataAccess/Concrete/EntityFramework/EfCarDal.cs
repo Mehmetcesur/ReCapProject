@@ -1,6 +1,8 @@
-﻿using DataAccess.Abstacts;
+﻿using Core.DataAccess.EntityFramework;
+using DataAccess.Abstacts;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,64 +13,27 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfCarDal : ICarDal
+    public class EfCarDal : EfEntityRepositoryBase<Car, RentACarContext>, ICarDal
     {
-        public void Add(Car entity)
-        {
-            using (RentACarContext context =new RentACarContext())
-            {
-                if (entity.Name.Length>=2 && entity.DailyPrice>=0)
-                {
-                    var addedEntity = context.Entry(entity);
-                    addedEntity.State = EntityState.Added;
-                    context.SaveChanges();
-                }
-                else
-                {
-                    Console.WriteLine("Lütfen daha uzun araç adı veya sıfırdan büyük fiyat giriniz.");
-                }
-
-                
-            }
-        }
-
-        public void Delete(Car entity)
+        public List<CarDetailDto> GetCarDetails()
         {
             using (RentACarContext context = new RentACarContext())
             {
-                var deletedEntity = context.Entry(entity);
-                deletedEntity.State = EntityState.Deleted;
-                context.SaveChanges();
+                             var result = from ca in context.Cars
+                             join b in context.Brands on ca.BrandId equals b.BrandId
+                             join co in context.Colors on ca.ColorId equals co.ColorId
+                             select new CarDetailDto
+                             {
+                                 CarId = ca.Id,
+                                 CarName = ca.Name,
+                                 BrandName = b.Name,
+                                 ColorName = co.Name,
+                                 DailyPrice = ca.DailyPrice
+                             };
+                return result.ToList();
+
+
             }
-
-        }
-
-        public Car Get(Expression<Func<Car, bool>> filter)
-        {
-            using (RentACarContext context = new RentACarContext())
-            {
-                return context.Set<Car>().SingleOrDefault(filter);
-            }
-
-        }
-
-        public List<Car> GetAll(Expression<Func<Car, bool>> filter = null)
-        {
-            using (RentACarContext context = new RentACarContext())
-            {
-                return filter == null ? context.Set<Car>().ToList() : context.Set<Car>().Where(filter).ToList(); // Ternary operatörü
-            }
-        }
-
-        public void Update(Car entity)
-        {
-            using (RentACarContext context = new RentACarContext())
-            {
-                var updatedEntity = context.Entry(entity);
-                updatedEntity.State = EntityState.Modified;
-                context.SaveChanges();
-            }
-
         }
     }
 }

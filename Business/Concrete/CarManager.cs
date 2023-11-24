@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.Dtos;
 
 namespace Business.Concrete
 {
@@ -39,6 +40,11 @@ namespace Business.Concrete
         {
             return _cardal.GetAll(c => c.ColorId == id);
 
+        }
+
+        public List<CarDetailDto> GetCarDetails()
+        {
+            return _cardal.GetCarDetails();
         }
     }
 }
