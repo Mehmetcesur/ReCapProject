@@ -26,10 +26,19 @@ namespace ConsoleUI
             //    Console.WriteLine(car.Name);
             //}
             //Console.WriteLine("***************");
+            var result =carManager.GetCarDetails();
 
-            foreach (var car in carManager.GetCarDetails())
+            if (result.Success==true)
             {
-                Console.WriteLine(car.CarName + "/" + car.BrandName + "/" + car.ColorName + "/" + car.DailyPrice);
+                foreach (var car in carManager.GetCarDetails().Data)
+                {
+                    Console.WriteLine(car.CarName + "/" + car.BrandName + "/" + car.ColorName + "/" + car.DailyPrice);
+                }
+            }
+
+            else
+            {
+                Console.WriteLine(result.Message);
             }
 
 

@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Entities.Dtos;
+using Core.Utilities.Results;
+using Business.Constant;
 
 namespace Business.Concrete
 {
@@ -20,31 +22,58 @@ namespace Business.Concrete
             _cardal = cardal;
         }
 
-        public List<Car> GetAll()
+        public IDataResult<List<Car>> GetAll()
         {
-            return _cardal.GetAll();
+            if (DateTime.Now.Hour == 22)
+            {
+                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
+            }
+
+            return new SuccessDataResult<List<Car>>(_cardal.GetAll(),Messages.CarAdded);
         }
 
-        public void Add(Car car)
+        public IResult Add(Car car)
         {
+            if (car.Name.Length < 2)
+            {
+                return new ErrorResult(Messages.CarNameInvalid);
+            } 
+                
 
             _cardal.Add(car);
-        }
 
-        public List<Car> GetCarsByBrandId(int id)
+            return new Result(true, Messages.CarAdded);
+        }
+        public IResult Update(Car car)
         {
-            return _cardal.GetAll(c => c.BrandId == id);
+            _cardal.Update(car);
+
+            return new SuccessResult(Messages.CarUpdated);
         }
 
-        public List<Car> GetCarsByColorId(int id)
+        public IResult Delete(Car car)
         {
-            return _cardal.GetAll(c => c.ColorId == id);
+            _cardal.Delete(car);                        
 
+            return new SuccessResult(Messages.CarDeleted);
         }
 
-        public List<CarDetailDto> GetCarDetails()
+        public IDataResult<List<Car>> GetCarsByBrandId(int id)
         {
-            return _cardal.GetCarDetails();
+            return new SuccessDataResult<List<Car>>(_cardal.GetAll(c => c.BrandId == id))                           ;
         }
+
+        public IDataResult<List<Car>> GetCarsByColorId(int id)
+        {
+            return new SuccessDataResult<List<Car>>(_cardal.GetAll(c => c.ColorId == id));
+
+        }
+
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_cardal.GetCarDetails());
+        }
+
+      
     }
 }
