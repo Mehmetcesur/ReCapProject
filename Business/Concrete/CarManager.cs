@@ -29,7 +29,7 @@ namespace Business.Concrete
                 return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
             }
 
-            return new SuccessDataResult<List<Car>>(_cardal.GetAll(),Messages.CarAdded);
+            return new SuccessDataResult<List<Car>>(_cardal.GetAll(),Messages.CarsListed);
         }
 
         public IResult Add(Car car)
