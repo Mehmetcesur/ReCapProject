@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Business.Absract
 {
-    internal interface IRentalService
+    public interface IRentalService
     {
         IDataResult<List<Rental>> GetAll();
         IDataResult<List<RentalDetailDto>> GetRentalsDetails();

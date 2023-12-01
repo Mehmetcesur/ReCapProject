@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Entities.Dtos;
 using Core.Utilities.Results;
 using Business.Constant;
+using Core.Aspects.Autofac.Validation;
+using Business.ValidationRules.FluentValidation;
 
 namespace Business.Concrete
 {
@@ -31,13 +33,9 @@ namespace Business.Concrete
 
             return new SuccessDataResult<List<Car>>(_cardal.GetAll(),Messages.CarsListed);
         }
-
-        public IResult Add(Car car)
+        [ValidationAspect(typeof(CarValidator))]
+        public IResult Add(Car car)     
         {
-            if (car.Name.Length < 2)
-            {
-                return new ErrorResult(Messages.CarNameInvalid);
-            } 
                 
 
             _cardal.Add(car);
