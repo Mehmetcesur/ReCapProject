@@ -25,13 +25,12 @@ namespace DataAccess.Concrete.EntityFramework
 
                              select new RentalDetailDto
                              {
-                                 RentalId = r.Id,
-                                 CarId = c.Id,
-                                 CustomerId = cu.Id,
-                                 UserId = u.Id,
+                                
                                  BrandName = b.Name,
                                  RentDate = r.RentDate,
-                                 ReturnDate = r.ReturnDate
+                                 ReturnDate = r.ReturnDate,
+                                 FirstName = u.FirstName, 
+                                 LastName = u.LastName,
                              };
                 return filter == null
                     ? result.ToList()
